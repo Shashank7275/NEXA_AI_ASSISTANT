@@ -1,381 +1,648 @@
-# 🤖 Jarvis Advanced Setup Guide (LiveKit + Google Realtime API)
+# 🤖 NEXA AI Assistant – Complete Setup Guide
 
-This guide explains EVERYTHING step‑by‑step in simple Hinglish + English. Follow line by line.
-
----
-
-# 📌 Overview (What is happening internally)
-
-When you run:
-
-```
-python agent.py console
-```
-
-Jarvis performs these steps:
-
-1. Load environment variables (.env)
-2. Connect to LiveKit Cloud
-3. Initialize Google Realtime API
-4. Setup microphone input
-5. Send instructions to Google
-6. Receive response
-7. Speak reply
-8. Save memory
-
-Your error happens in Step 5.
+> **NEXA AI Assistant** is an advanced AI desktop assistant built using Python, Google Gemini, LiveKit, automation tools, web search, weather APIs, memory, and voice interaction.
 
 ---
 
-# STEP 1: Verify Folder Structure
+# 📋 System Requirements
 
-Your project should look like this:
+Before starting, make sure you have:
+
+* Windows 10/11 (64-bit)
+* Python 3.11+ (Recommended)
+* Git
+* VS Code (Recommended)
+* Internet Connection
+
+Check Python version:
+
+```bash
+python --version
+```
+
+or
+
+```bash
+py --version
+```
+
+Expected Output
 
 ```
-Jarvis/
+Python 3.11.x
+```
+
+---
+
+# 📂 Clone the Project
+
+```bash
+git clone <your_repository_url>
+
+cd NEXA_AI_ASSISTANT
+```
+
+or simply open the project folder.
+
+---
+
+# 🟢 STEP 1 — Create Virtual Environment (.venv)
+
+Inside the project folder run:
+
+```bash
+python -m venv .venv
+```
+
+If Python command doesn't work
+
+```bash
+py -m venv .venv
+```
+
+After creating the environment activate it.
+
+## Windows CMD
+
+```cmd
+.venv\Scripts\activate
+```
+
+## Windows PowerShell
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Then activate again
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+## Git Bash
+
+```bash
+source .venv/Scripts/activate
+```
+
+When activated you'll see
+
+```
+(.venv)
+```
+
+before your terminal path.
+
+---
+
+# 🟢 STEP 2 — Upgrade pip
+
+Always upgrade pip before installing packages.
+
+```bash
+python -m pip install --upgrade pip
+```
+
+Verify version
+
+```bash
+pip --version
+```
+
+---
+
+# 🟢 STEP 3 — Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+Wait until every package finishes installing.
+
+---
+
+# 🟢 STEP 4 — Create Environment Variables
+
+Create a file named
+
+```
+.env
+```
+
+inside the project root.
+
+Paste the following:
+
+```env
+# -----------------------------
+# LiveKit
+# -----------------------------
+
+LIVEKIT_URL=
+LIVEKIT_API_KEY=
+LIVEKIT_API_SECRET=
+
+# -----------------------------
+# Google Gemini
+# -----------------------------
+
+GOOGLE_API_KEY=
+
+# -----------------------------
+# Google Custom Search
+# -----------------------------
+
+GOOGLE_SEARCH_API_KEY=
+SEARCH_ENGINE_ID=
+
+# -----------------------------
+# OpenWeather
+# -----------------------------
+
+OPENWEATHER_API_KEY=
+
+# -----------------------------
+# OpenAI
+# -----------------------------
+
+OPENAI_API_KEY=
+```
+
+Fill every API key before running the project.
+
+---
+
+# 🟢 STEP 5 — Create Memory Folder
+
+Inside the project create a folder named
+
+```
+memory
+```
+
+Project structure
+
+```
+NEXA_AI_ASSISTANT/
+
 │
 ├── agent.py
-├── memory.py
-├── test_memory_persistence.py
-├── jarvis_gui.py
-├── .env
 ├── requirements.txt
-└── .venv/
+├── .env
+├── README.md
+│
+├── memory/
+│      └── Nexa_memory.py
+│
+├── Nexa_gui.py
+├── 
+
+...
 ```
 
-Explanation:
+Move
 
-agent.py → Main brain
-memory.py → Memory system
-.env → API keys
-.venv → Python virtual environment
+```
+Nexa_memory.py
+```
+
+inside the
+
+```
+memory
+```
+
+folder.
 
 ---
 
-# STEP 2: Activate Virtual Environment
-
-Open terminal in project folder:
+# 🟢 STEP 6 — Verify Project Structure
 
 ```
-cd path/to/Jarvis
+NEXA_AI_ASSISTANT
+
+│
+├── .venv
+├── .env
+├── README.md
+├── requirements.txt
+├── agent.py
+│
+├── memory
+│      └── Nexa_memory.py
+│
+├── Nexa_gui.py
+├── Nexa_prompt.py
+├── 
+└── ...
 ```
 
-Activate:
+---
 
-Windows:
+# 🟢 STEP 7 — Run NEXA
+
+Activate virtual environment
 
 ```
 .venv\Scripts\activate
 ```
 
-Expected output:
+Run
 
-```
-(.venv) C:\Users\...
-```
-
-Means environment is active.
-
----
-
-# STEP 3: Verify API Key
-
-Open .env file
-
-It should contain:
-
-```
-GOOGLE_API_KEY=your_api_key_here
-LIVEKIT_URL=wss://jarvis-xxxx.livekit.cloud
-LIVEKIT_API_KEY=xxxx
-LIVEKIT_API_SECRET=xxxx
-```
-
-Test key:
-
-```
-python -c "from dotenv import load_dotenv; import os; load_dotenv(); print(os.getenv('GOOGLE_API_KEY'))"
-```
-
-Expected output:
-
-```
-AIzaSyXXXX
-```
-
-If None → .env not loading
-
----
-
-# STEP 4: Verify Internet Connection
-
-Run:
-
-```
-ping generativelanguage.googleapis.com
-```
-
-Expected:
-
-```
-Reply from...
-```
-
-If Request timed out → network issue
-
-Fix:
-
-Disable VPN
-Restart router
-
----
-
-# STEP 5: Test Google API Directly
-
-https://aistudio.google.com/?project=gen-lang-client-0994700916
-
-Create test_google.py
-
-```
-import os
-from dotenv import load_dotenv
-import google.generativeai as genai
-
-load_dotenv()
-
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-response = model.generate_content("Hello")
-
-print(response.text)
-```
-
-Run:
-
-```
-python test_google.py
-```
-
-Expected:
-
-```
-Hello! How can I help you?
-```
-
-If error → API issue
-
----
-
-# STEP 6: Verify LiveKit Connection
-
-https://docs.livekit.io/agents/start/voice-ai-quickstart/
-
-Run:
-
-```
-python -c "from livekit.agents import config; print(config.settings.livekit_url)"
-```
-
-Expected:
-
-```
-wss://jarvis-xxxx.livekit.cloud
-```
-
-If None → LiveKit not configured
-
----
-
-# STEP 7: Disable Memory Temporarily (IMPORTANT)
-
-Open agent.py
-
-Find:
-
-```
-ENABLE_MEMORY_INTERCEPTOR = True
-```
-
-Change:
-
-```
-ENABLE_MEMORY_INTERCEPTOR = False
-```
-
-Why:
-
-Removes extra async load
-
----
-
-# STEP 8: Run Jarvis
-
-Run:
-
-```
+```bash
 python agent.py console
 ```
 
-Expected:
-
-```
-Connected to LiveKit
-Google setupComplete received
-Jarvis ready
-```
+If everything is configured correctly you'll see NEXA starting inside the terminal.
 
 ---
 
-# STEP 9: Verify Microphone
+# 🎉 Congratulations
 
-Windows:
-
-Settings
-Sound
-Input
-
-Test microphone
-
-If mic not working → timeout occurs
+NEXA AI Assistant is now running.
 
 ---
 
-# STEP 10: Increase Timeout (Advanced Fix)
-
-Open agent.py
-
-Find realtime config:
-
-Change timeout:
-
-```
-timeout=60
-```
-
-Instead of:
-
-```
-timeout=30
-```
+# ⚠ Common Errors & Solutions
 
 ---
 
-# STEP 11: Verify Python Version
+## ❌ python is not recognized
 
-Run:
+Error
 
 ```
+'python' is not recognized...
+```
+
+Solution
+
+Install Python from the official installer and ensure **Add Python to PATH** is checked during installation.
+
+Verify
+
+```bash
 python --version
 ```
 
-Required:
+---
+
+## ❌ No module named ...
+
+Example
 
 ```
-Python 3.10 or 3.11
+ModuleNotFoundError
 ```
 
-Not supported:
+Solution
 
-3.13
+```bash
+pip install -r requirements.txt
+```
+
+or
+
+```bash
+pip install package_name
+```
 
 ---
 
-# STEP 12: Reinstall Dependencies
+## ❌ Virtual Environment not activated
 
-Run:
+If terminal doesn't show
 
 ```
-pip install -r requirements.txt --force-reinstall
+(.venv)
+```
+
+activate it
+
+```bash
+.venv\Scripts\activate
 ```
 
 ---
 
-# STEP 13: Final Test Flow
+## ❌ pip command not found
 
-Start:
+Use
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+---
+
+## ❌ Permission Denied
+
+Run Terminal
+
+**As Administrator**
+
+or
+
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+
+---
+
+## ❌ Missing .env file
+
+Error
 
 ```
+Environment Variable Not Found
+```
+
+Solution
+
+Create
+
+```
+.env
+```
+
+Add all required API keys.
+
+---
+
+## ❌ Google Gemini Error
+
+```
+GOOGLE_API_KEY not found
+```
+
+Solution
+
+Add
+
+```env
+GOOGLE_API_KEY=YOUR_KEY
+```
+
+inside
+
+```
+.env
+```
+
+---
+
+## ❌ LiveKit Connection Failed
+
+Verify
+
+```
+LIVEKIT_URL
+LIVEKIT_API_KEY
+LIVEKIT_API_SECRET
+```
+
+All three values must be valid.
+
+---
+
+## ❌ Google Search Doesn't Work
+
+Verify
+
+```
+GOOGLE_SEARCH_API_KEY
+SEARCH_ENGINE_ID
+```
+
+Both values are required.
+
+---
+
+## ❌ Weather API Error
+
+Add
+
+```env
+OPENWEATHER_API_KEY=
+```
+
+inside
+
+```
+.env
+```
+
+---
+
+## ❌ OpenAI Error
+
+Add
+
+```env
+OPENAI_API_KEY=
+```
+
+---
+
+## ❌ Memory Not Working
+
+Create
+
+```
+memory/
+```
+
+folder.
+
+Move
+
+```
+Nexa_memory.py
+```
+
+inside
+
+```
+memory/
+```
+
+Verify the import path matches the folder structure.
+
+---
+
+## ❌ FileNotFoundError
+
+Ensure all files exist:
+
+```
+agent.py
+
+requirements.txt
+
+.env
+
+memory/
+
+Nexa_memory.py
+```
+
+---
+
+## ❌ ImportError
+
+Run
+
+```bash
+pip install -r requirements.txt
+```
+
+or reinstall the missing package.
+
+---
+
+
+
+---
+
+## ❌ API Key Invalid
+
+Double-check:
+
+* Correct API key
+* No extra spaces
+* No quotation marks unless required
+* API enabled in the provider dashboard
+* Billing/quota (if applicable)
+
+---
+
+## ❌ Agent Doesn't Start
+
+Run
+
+```bash
 python agent.py console
 ```
 
-Then speak:
+instead of
 
-```
-Hello Jarvis
-```
-
-Expected:
-
-```
-Jarvis replies
+```bash
+python agent.py
 ```
 
 ---
 
-# Root Cause of Your Error
+## 🔄 Reinstall Everything (Fresh Setup)
 
-Error:
-
-```
-generate_reply timed out
-```
-
-Means:
-
-Jarvis connected
-BUT
-Google did not respond
-
-Causes:
-
-• Internet slow
-• API key invalid
-• Timeout too low
-• Microphone not ready
-• VPN blocking
-
----
-
-# BEST WORKING CONFIG (Recommended)
-
-Python: 3.11
-LiveKit: latest
-Gemini realtime: enabled
-Memory: enabled after test
-Timeout: 60 seconds
-
----
-
-# FINAL SUCCESS OUTPUT
-
-You should see:
+Delete
 
 ```
-LiveKit Connected
-Google setupComplete received
-Listening...
-User speaking...
-Jarvis responding...
+.venv
+```
+
+Create again
+
+```bash
+python -m venv .venv
+```
+
+Activate
+
+```bash
+.venv\Scripts\activate
+```
+
+Upgrade pip
+
+```bash
+python -m pip install --upgrade pip
+```
+
+Install requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+Run
+
+```bash
+python agent.py console
 ```
 
 ---
 
-# If Still Not Working
+# 🚀 Features
 
-Solution:
-
-Use gemini‑1.5‑flash instead realtime
-
-Realtime is unstable sometimes
+* 🎙️ Voice Assistant
+* 🤖 Google Gemini AI
+* 🌐 Google Search Integration
+* 🌦️ Real-Time Weather
+* 🧠 Persistent Memory System
+* 💬 Conversational AI
+* 🖥️ Desktop Automation
+* ⚡ Fast Responses
+* 🔊 Speech Recognition
+* 🔈 Text-to-Speech
+* 📂 File & Application Control
+* 🧩 Modular Architecture
+* 🔐 Secure API Configuration via `.env`
 
 ---
 
-# DONE
+# 💡 Tips
 
-Your Jarvis will work perfectly after this setup.
+* Always activate `.venv` before running the assistant.
+* Never commit your `.env` file to GitHub.
+* Keep `requirements.txt` updated after installing new packages.
+* Store all secrets only in `.env`.
+* Back up your `memory/` folder if you want to preserve conversations.
 
 ---
 
-If you want, I can also give fully optimized agent.py file.
+# ❤️ Built With
+
+* Python
+* Google Gemini
+* LiveKit
+* OpenAI
+* OpenWeather API
+* Google Custom Search API
+* dotenv
+* AsyncIO
+* Modern AI Agent Architecture
+
+---
+
+# ▶️ Quick Start
+
+```bash
+git clone <repository>
+
+cd NEXA_AI_ASSISTANT
+
+python -m venv .venv
+
+.venv\Scripts\activate
+
+python -m pip install --upgrade pip
+
+pip install -r requirements.txt
+
+# Create .env and add all API keys
+
+python agent.py console
+```
+
+---
+
+# 📜 License
+
+This project is intended for educational and personal use unless otherwise specified by the repository license.
