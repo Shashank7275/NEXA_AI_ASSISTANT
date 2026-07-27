@@ -1,0 +1,16 @@
+{
+    "status": "success",
+    "country": "India",
+    "countryCode": "IN",
+    "region": "UP",
+    "regionName": "Uttar Pradesh",
+    "city": "Noida",
+    "zip": "110091",
+    "lat": 28.5759,
+    "lon": 77.3345,
+    "timezone": "Asia/Kolkata",
+    "isp": "Excitel Broadband Private Limited",
+    "org": "Ayantel Network",
+    "as": "AS133982 Excitel Broadband Private Limited",
+    "query": "103.170.81.87"
+}
