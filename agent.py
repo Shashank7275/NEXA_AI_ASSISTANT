@@ -112,7 +112,7 @@ async def entrypoint(ctx: agents.JobContext):
             
             session = AgentSession(
                 llm=google.beta.realtime.RealtimeModel(
-                    voice="Leda"
+                    voice="Charon"
                 )
             )
             
