@@ -1,4 +1,4 @@
-import ossss
+import osss
 import subprocess
 import sys
 import logging
