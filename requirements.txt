@@ -3,6 +3,8 @@ livekit-plugins-openai
 livekit-plugins-silero
 livekit-plugins-google
 livekit-plugins-noise-cancellation
+google-genai
+SpeechRecognition[audio]
 langchain-community
 requests
 python-dotenv

@@ -177,6 +177,11 @@ OPENAI_API_KEY=
 
 Fill every API key before running the project.
 
+For the standalone desktop voice assistant, `GOOGLE_API_KEY` is required.
+The default Gemini model is `gemini-2.5-flash`; set `GEMINI_MODEL` in `.env`
+to use a different model available to your API key. Set `VOICE_LANGUAGE` to
+the speech-recognition locale you use, for example `en-US` or `hi-IN`.
+
 ---
 
 # 🟢 STEP 5 — Create Memory Folder
@@ -267,6 +272,25 @@ If everything is configured correctly you'll see NEXA starting inside the termin
 # 🎉 Congratulations
 
 NEXA AI Assistant is now running.
+
+---
+
+# 🎙️ Run the Standalone Desktop Voice Assistant
+
+The standalone desktop app supports typed chat, push-to-talk microphone input,
+and spoken Gemini responses. It uses the same `GOOGLE_API_KEY` configured above.
+Install the requirements, then run:
+
+```bash
+python desktop_assistant.py
+```
+
+Press **Listen** to record a message, or type a message and press **Enter** or
+**Send**. Use **New chat** to clear the conversation context.
+
+Speech recognition uses Google's online speech-recognition service, so recorded
+audio is sent to Google for transcription. Microphone input requires PyAudio,
+installed through `SpeechRecognition[audio]` in `requirements.txt`.
 
 ---
 
